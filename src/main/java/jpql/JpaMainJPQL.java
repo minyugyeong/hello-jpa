@@ -1,10 +1,14 @@
 package jpql;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jpateam.Member;
 
 import java.util.List;
 
-public class JpaMain {
+public class JpaMainJPQL {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -15,13 +19,10 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("member1");
-            em.persist(member);
-
-            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
-            TypedQuery<String> query2 = em.createQuery("select m.username from Member m", String.class);
-            Query query3 = em.createQuery("select m.username, m.age from Member m");
+            List<Member> result = em.createQuery(
+                    "select m From Member m where m.username like '%kim%",
+                    Member.class
+            ).getResultList();
 
             tx.commit();
         } catch (Exception e) {
